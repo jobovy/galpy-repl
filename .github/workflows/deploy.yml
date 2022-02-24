@@ -74,9 +74,9 @@ jobs:
         run: mkdir output
       - name: make empty site
         working-directory: output
-        run: jupyter lite init
+        run: jupyter lite init --apps repl
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: Test ${{ github.run_number }}
-          path: ./output
+          path: ./output/_output
