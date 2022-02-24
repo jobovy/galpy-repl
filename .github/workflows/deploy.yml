@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: jobovy/juyterlite
+          repository: jobovy/jupyterlite
           ref: quiet-prerun
 # Following steps copied from the main juyterlite build action           
       - uses: actions/setup-python@v2
