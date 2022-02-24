@@ -1,0 +1,95 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: jobovy/jupyterlite
+          ref: quiet-prerun
+# Following steps copied from the main juyterlite build action           
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Setup pip (base)
+        shell: bash
+        run: python3 -m pip install --user -U pip setuptools wheel
+      - name: Cache (pip)
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-
+      - name: Setup pip (build)
+        shell: bash
+        run: python3 -m pip install -r requirements-build.txt
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Cache (node_modules)
+        uses: actions/cache@v2
+        id: cache-node-modules
+        with:
+          path: node_modules/
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Cache (.yarn-packages)
+        uses: actions/cache@v2
+        id: cache-yarn-packages
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        with:
+          path: .yarn-packages
+          key: |
+            ${{ env.CACHE_EPOCH }}-yarn-packages-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-yarn-packages-
+      - name: Install
+        shell: bash
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: doit setup:js
+      - name: Build (js)
+        shell: bash
+        run: doit -n4 build:js* || doit build:js*
+      - name: Build (py)
+        shell: bash
+        run: doit -n4 build:py*
+      - name: Dist
+        shell: bash
+        run: doit dist
+# Now that jupyterlite is built, let's pip install the wheel
+      - name: Install jupyterlite
+        run: pip install dist/*.whl
+# and let's create an empty site
+      - name: create output dir
+        run: mkdir output
+      - name: make empty site
+        working-directory: output
+        run: jupyter lite init --apps repl --no-unused-shared-packages --no-sourcemaps
+# Create artifact for debugging        
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test-${{ github.run_number }}
+          path: ./output/_output
+# Push to Amazon S3
+      - name: Upload to AWS S3
+        uses: jakejarvis/s3-sync-action@v0.5.1
+        if: github.ref == 'refs/heads/main'
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'
+          SOURCE_DIR: './output/_output'
+          DEST_DIR: 'repl'
