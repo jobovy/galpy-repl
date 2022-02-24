@@ -49,7 +49,7 @@ jobs:
           path: .yarn-packages
           key: |
             ${{ env.CACHE_EPOCH }}-yarn-packages-${{ hashFiles('yarn.lock') }}
-         restore-keys: |
+          restore-keys: |
             ${{ env.CACHE_EPOCH }}-yarn-packages-
       - name: Install
         shell: bash
