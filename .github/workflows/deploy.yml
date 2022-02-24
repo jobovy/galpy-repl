@@ -1,0 +1,80 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: jobovy/juyterlite
+          ref: quiet-prerun
+# Following steps copied from the main juyterlite build action           
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Setup pip (base)
+        shell: bash
+        run: python3 -m pip install --user -U pip setuptools wheel
+      - name: Cache (pip)
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
+          restore-keys: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-
+      - name: Setup pip (build)
+        shell: bash
+        run: python3 -m pip install -r requirements-build.txt
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Cache (node_modules)
+        uses: actions/cache@v2
+        id: cache-node-modules
+        with:
+          path: node_modules/
+          key: |
+            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Cache (.yarn-packages)
+        uses: actions/cache@v2
+        id: cache-yarn-packages
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        with:
+          path: .yarn-packages
+          key: |
+          ${{ env.CACHE_EPOCH }}-yarn-packages-${{ hashFiles('yarn.lock') }}
+         restore-keys: |
+            ${{ env.CACHE_EPOCH }}-yarn-packages-
+      - name: Install
+        shell: bash
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: doit setup:js
+      - name: Build (js)
+        shell: bash
+        run: doit -n4 build:js* || doit build:js*
+      - name: Build (py)
+        shell: bash
+        run: doit -n4 build:py*
+      - name: Dist
+        shell: bash
+        run: doit dist
+# Now that jupyterlite is built, let's pip install the wheel
+      - name: Install jupyterlite
+        run: pip install dist/*.whl
+# and let's create an empty site
+      - name: create output dir
+        run: mkdir output
+      - name: make empty site
+        cwd: output
+        run: jupyter lite init
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test ${{ github.run_number }}
+          path: ./output
