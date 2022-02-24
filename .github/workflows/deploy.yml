@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - initial-setup
 
 jobs:
   deploy:
@@ -84,6 +83,7 @@ jobs:
 # Push to Amazon S3
       - name: Upload to AWS S3
         uses: jakejarvis/s3-sync-action@v0.5.1
+        if: github.ref == 'refs/heads/main'
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
