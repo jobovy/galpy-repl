@@ -48,7 +48,7 @@ jobs:
         with:
           path: .yarn-packages
           key: |
-          ${{ env.CACHE_EPOCH }}-yarn-packages-${{ hashFiles('yarn.lock') }}
+            ${{ env.CACHE_EPOCH }}-yarn-packages-${{ hashFiles('yarn.lock') }}
          restore-keys: |
             ${{ env.CACHE_EPOCH }}-yarn-packages-
       - name: Install
