@@ -72,7 +72,7 @@ jobs:
       - name: create output dir
         run: mkdir output
       - name: make empty site
-        cwd: output
+        working-directory: output
         run: jupyter lite init
       - name: Upload
         uses: actions/upload-artifact@v2
