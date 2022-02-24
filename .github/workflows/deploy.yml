@@ -74,7 +74,7 @@ jobs:
         run: mkdir output
       - name: make empty site
         working-directory: output
-        run: jupyter lite init --apps repl --no-unused-shared-packages --no-sourcemaps
+        run: jupyter lite init --apps repl --no-sourcemaps
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
