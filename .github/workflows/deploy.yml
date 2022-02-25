@@ -93,17 +93,3 @@ jobs:
           AWS_REGION: 'us-east-2'
           SOURCE_DIR: './output/_output'
           DEST_DIR: 'repl'
-# Also upload the 'repl' re-direct file, can first safely delete the 
-# jupyterlite check out and check out this repository instead
-      - uses: actions/checkout@v2
-      - name: Upload repl re-direct
-        uses: jobovy/s3-upload-github-action@master
-        with:
-          args: --acl public-read --content-type text/html
-        env:
-          FILE: repl
-          S3_KEY: repl
-          AWS_REGION: 'us-east-2'
-          S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
