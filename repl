@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+    <meta http-equiv="refresh" content="0; url=/repl/repl/index.html?kernel=python&prerun=import%20micropip%0Aawait%20micropip.install(%27https://www.galpy.org/wheelhouse/galpy-latest-py3-none-any.whl%27)">
+    </head>
+    <body>
+    </body>
+    </html>
