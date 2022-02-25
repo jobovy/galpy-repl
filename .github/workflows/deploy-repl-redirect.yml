@@ -16,7 +16,7 @@ jobs:
       - name: Add prerun.py code
         run: |
           CODE_FROM_PRERUN_DOT_PY=$(python -c "import urllib.parse; f= open('prerun.py','r'); out= [urllib.parse.quote(line,safe='')+'%0A' for line in f.readlines() if line[0] != '#']; f.close(); print(''.join(out))")
-          sed -i 's/CODE_FROM_PRERUN_DOT_PY/$CODE_FROM_PRERUN_DOT_PY/g' repl
+          sed -i 's/CODE_FROM_PRERUN_DOT_PY/'"$CODE_FROM_PRERUN_DOT_PY"'/g' repl
       - name: Upload repl re-direct
         uses: jobovy/s3-upload-github-action@master
         with:
