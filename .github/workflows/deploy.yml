@@ -9,11 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    # we check out both this repository and my jupyterlite one
-    # putting this one in a subdirectory, because we don't use it much
-      - uses: actions/checkout@v2
-        with:
-          path: galpy-repl
       - uses: actions/checkout@v2
         with:
           repository: jobovy/jupyterlite
@@ -98,13 +93,15 @@ jobs:
           AWS_REGION: 'us-east-2'
           SOURCE_DIR: './output/_output'
           DEST_DIR: 'repl'
-# Also upload the 'repl' re-direct file
+# Also upload the 'repl' re-direct file, can first safely delete the 
+# jupyterlite check out and check out this repository instead
+      - uses: actions/checkout@v2
       - name: Upload repl re-direct
         uses: jobovy/s3-upload-github-action@master
         with:
           args: --acl public-read --content-type text/html
         env:
-          FILE: galpy-repl/repl
+          FILE: repl
           S3_KEY: repl
           AWS_REGION: 'us-east-2'
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
