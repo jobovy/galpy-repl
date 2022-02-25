@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'repl'
+      - 'prerun.py'
 
 jobs:
   deploy:

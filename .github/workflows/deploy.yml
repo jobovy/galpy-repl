@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'README.md'
+      - 'repl'
+      - 'prerun.py'
+      - ''.github/workflows/deploy-rel-redirect.yml'  
 
 jobs:
   deploy:
