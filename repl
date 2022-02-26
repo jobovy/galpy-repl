@@ -1,8 +1,10 @@
 <!DOCTYPE html>
     <html>
-    <head>
-    <meta http-equiv="refresh" content="0; url=/repl/repl/index.html?kernel=python&prerun=CODE_FROM_PRERUN_DOT_PY">
-    </head>
-    <body>
-    </body>
+        <head>
+            <script>
+                window.location.replace("/repl/repl/index.html?kernel=python&prerun=CODE_FROM_PRERUN_DOT_PY"+"&"+document.location.search.substring(1));
+            </script>
+        </head>
+        <body>
+        </body>
     </html>
