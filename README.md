@@ -22,3 +22,5 @@ This will create a general `jupyterlite` REPL at `/repl/repl/index.html` and a r
 
 To host using another provider, you would need to change the parts of the deploy workflows that upload to AWS S3 to point to your other provider instead.
 
+While this repository is set up to create a REPL with a Python kernel, this can be easily changed by changing (or removing) the `kernel` URL option in the [repl](repl) file. In that case, non-Python code can also be put in `prerun.py` (it's just a file that gets copied to the REPL, never run as a Python script).
+
