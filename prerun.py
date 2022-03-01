@@ -2,7 +2,6 @@
 # Monkey-patch the pyodide astropy
 import sys
 sys.modules['_microprocessing']= object
-sys.modules['yaml']= object
 # Install astroquery
 import micropip
 await micropip.install('astroquery')
