@@ -1,6 +1,13 @@
 # A set of Python commands to pre-run for the galpy.org/repl redirect
-# Install galpy
+# Monkey-patch the pyodide astropy
+import sys
+sys.modules['_ssl']= object
+sys.modules['_microprocessing']= object
+sys.modules['_yaml']= object
+# Install astroquery
 import micropip
+await micropip.install('astroquery')
+# Install galpy
 await micropip.install('https://www.galpy.org/wheelhouse/galpy-latest-py3-none-any.whl')
 # Turn off warnings
 import warnings
