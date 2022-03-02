@@ -1,7 +1,4 @@
 # A set of Python commands to pre-run for the galpy.org/repl redirect
-# Monkey-patch the pyodide astropy
-import sys
-sys.modules['_microprocessing']= object
 # Install astroquery
 import micropip
 await micropip.install('astroquery')
