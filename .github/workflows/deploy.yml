@@ -18,14 +18,10 @@ jobs:
         with:
           repository: jobovy/jupyterlite
           ref: quiet-prerun
-      - name: temp patch to work with latest pyodide
-        run: |
-          sed -i 's@.*micropip._micropip import PACKAGE_MANAGER as _MP_PACKAGE_MANAGER.*@import micropip@' packages/pyolite-kernel/py/piplite/piplite/piplite.py
-          sed -i 's@.*_MP_PACKAGE_MANAGER.install(requirements, ctx, keep_going).*@            return await micropip.install(requirements,keep_going)@' packages/pyolite-kernel/py/piplite/piplite/piplite.py
 # Following steps copied from the main juyterlite build action           
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: "3.10"
       - name: Setup pip (base)
         shell: bash
         run: python3 -m pip install --user -U pip setuptools wheel
@@ -86,7 +82,7 @@ jobs:
 # Edit the jupyter-lite.json to use galpy's favicon and latest pyodide
       - name: Edit jupyter-lite.json config
         working-directory: output/_output
-        run: python -c "import json; jsonFile = open('jupyter-lite.json'); data= json.load(jsonFile); jsonFile.close(); data['jupyter-config-data']['faviconUrl']= '../../images/logo-small.ico'; data['jupyter-config-data']['litePluginSettings']= {'@jupyterlite/pyolite-kernel-extension:kernel':{'pyodideUrl':'https://cdn.jsdelivr.net/pyodide/dev/full/pyodide.js'}}; jsonFile= open('jupyter-lite.json','w'); json.dump(data,jsonFile,indent=2); jsonFile.close()"
+        run: python -c "import json; jsonFile = open('jupyter-lite.json'); data= json.load(jsonFile); jsonFile.close(); data['jupyter-config-data']['faviconUrl']= '../../images/logo-small.ico'; data['jupyter-config-data']['litePluginSettings']= {'@jupyterlite/pyolite-kernel-extension:kernel':{'pyodideUrl':'https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js'}}; jsonFile= open('jupyter-lite.json','w'); json.dump(data,jsonFile,indent=2); jsonFile.close()"
 # Create artifact for debugging        
       - name: Upload
         uses: actions/upload-artifact@v2
