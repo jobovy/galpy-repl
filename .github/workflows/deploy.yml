@@ -83,6 +83,10 @@ jobs:
       - name: Edit jupyter-lite.json config
         working-directory: output/_output
         run: python -c "import json; jsonFile = open('jupyter-lite.json'); data= json.load(jsonFile); jsonFile.close(); data['jupyter-config-data']['faviconUrl']= '../../images/logo-small.ico'; data['jupyter-config-data']['litePluginSettings']= {'@jupyterlite/pyolite-kernel-extension:kernel':{'pyodideUrl':'https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js'}}; jsonFile= open('jupyter-lite.json','w'); json.dump(data,jsonFile,indent=2); jsonFile.close()"
+# Touch all files so they sync to S3
+      - name: Touch files
+        working-directory: output/_output
+        run: find . -type f -exec touch {} +
 # Create artifact for debugging        
       - name: Upload
         uses: actions/upload-artifact@v2
