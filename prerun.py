@@ -3,7 +3,8 @@
 import micropip
 await micropip.install('astroquery')
 # Install galpy
-await micropip.install('https://www.galpy.org/wheelhouse/galpy-latest-py3-none-any.whl')
+import pyodide_js
+await pyodide_js.loadPackage(['numpy','scipy','matplotlib','astropy','future','setuptools','https://www.galpy.org/wheelhouse/galpy-latest-cp310-cp310-emscripten_wasm32.whl'])
 # Turn off warnings
 import warnings
 from galpy.util import galpyWarning
