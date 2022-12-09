@@ -8,6 +8,7 @@ on:
       - 'repl'
       - 'prerun.py'
       - '.github/workflows/deploy-repl-redirect.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:

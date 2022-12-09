@@ -8,7 +8,8 @@ on:
       - 'README.md'
       - 'repl'
       - 'prerun.py'
-      - '.github/workflows/deploy-repl-redirect.yml'  
+      - '.github/workflows/deploy-repl-redirect.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
