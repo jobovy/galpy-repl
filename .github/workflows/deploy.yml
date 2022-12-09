@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: jobovy/jupyterlite
-          ref: quiet-prerun
+          ref: quiet-prerun-purge-galpy
 # Following steps copied from the main juyterlite build action           
       - uses: actions/setup-python@v2
         with:
