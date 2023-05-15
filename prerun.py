@@ -15,8 +15,15 @@ import astropy.units as u
 # Set up galpy to return outputs as astropy Quantities
 import galpy.util.conversion
 galpy.util.conversion._APY_UNITS=True
-# Also need to set the following, because pyodide SkyCoord failure prevents this from being set correctly in Orbits
-import galpy.orbit.Orbits
-galpy.orbit.Orbits._APY_LOADED= True
+# Get astroquery in Orbit.from_name to work by using pyodide-http
+await micropip.install(["ssl","pyodide-http>=0.2.1"])
+import pyodide_http
+pyodide_http.patch_all()
+# Currently need to reload these http and urllib libraries (see koenvo/pyodide-http/issues/33)
+from importlib import reload
+import http.client
+import urllib.request
+reload(http.client)
+reload(urllib.request)
 # Inline plots
 %matplotlib inline
