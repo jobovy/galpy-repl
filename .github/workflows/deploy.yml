@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: python3 -m pip install --user -U pip setuptools wheel
       - name: Cache (pip)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: |
@@ -42,14 +42,14 @@ jobs:
         with:
           node-version: 14.x
       - name: Cache (node_modules)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: cache-node-modules
         with:
           path: node_modules/
           key: |
             ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
       - name: Cache (.yarn-packages)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: cache-yarn-packages
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         with:
