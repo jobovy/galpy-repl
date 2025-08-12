@@ -14,7 +14,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Add prerun.py code
         run: |
           CODE_FROM_PRERUN_DOT_PY=$(python -c "import urllib.parse; f= open('prerun.py','r'); out= [urllib.parse.quote(line,safe='')+'%0A' for line in f.readlines() if line[0] != '#']; f.close(); print(''.join(out))")
