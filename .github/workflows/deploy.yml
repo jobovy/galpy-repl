@@ -20,7 +20,7 @@ jobs:
           repository: jobovy/jupyterlite
           ref: quiet-prerun-purge-galpy
 # Following steps copied from the main juyterlite build action           
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.10"
       - name: Setup pip (base)
