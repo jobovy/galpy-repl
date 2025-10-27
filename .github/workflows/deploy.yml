@@ -9,6 +9,14 @@ on:
       - 'repl'
       - 'prerun.py'
       - '.github/workflows/deploy-repl-redirect.yml'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'repl'
+      - 'prerun.py'
+      - '.github/workflows/deploy-repl-redirect.yml'
   workflow_dispatch:
 
 jobs:
@@ -97,7 +105,7 @@ jobs:
 # Push to Amazon S3
       - name: Upload to AWS S3
         uses: jakejarvis/s3-sync-action@v0.5.1
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
           args: --acl public-read --follow-symlinks --delete
         env:

@@ -8,6 +8,14 @@ on:
       - 'repl'
       - 'prerun.py'
       - '.github/workflows/deploy-repl-redirect.yml'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'repl'
+      - 'prerun.py'
+      - '.github/workflows/deploy-repl-redirect.yml'
   workflow_dispatch:
 
 jobs:
@@ -21,6 +29,7 @@ jobs:
           sed -i 's/CODE_FROM_PRERUN_DOT_PY/'"$CODE_FROM_PRERUN_DOT_PY"'/g' repl
       - name: Upload repl re-direct
         uses: jobovy/s3-upload-github-action@master
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
           args: --acl public-read --content-type text/html
         env:
