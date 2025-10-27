@@ -50,7 +50,7 @@ jobs:
         run: find . -type f -exec touch {} +
 # Create artifact for debugging        
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Test-${{ github.run_number }}
           path: ./output/_output
