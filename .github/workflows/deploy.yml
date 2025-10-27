@@ -25,13 +25,15 @@ jobs:
     steps:
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          # When updating this, also update jupyterlite-core and -pyodide-kernel versions 
+          # below and the galpy version in the prerun.py file
+          python-version: "3.12"
       - name: Install JupyterLite
-        run: python -m pip install jupyterlite-core
+        run: python -m pip install jupyterlite-core==0.6.4
       - name: Install pyodide-kernel extension
-        run: python -m pip install jupyterlite-pyodide-kernel
+        run: python -m pip install jupyterlite-pyodide-kernel==0.6.1
       - name: Install my jupyterlite_repl_prerun extension
-        run: python -m pip install jupyterlite_repl_prerun    
+        run: python -m pip install jupyterlite_repl_prerun
 # and let's create an empty site
       - name: create output dir
         run: mkdir output
