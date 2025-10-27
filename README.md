@@ -3,13 +3,13 @@ A Jupyterlite-based REPL for galpy
 
 ## General REPL live at **[www.galpy.org/repl/repl/index.html?kernel=python](https://www.galpy.org/repl/repl/index.html?kernel=python)** 
 
-Immediate version available at [www.galpy.org.s3-website.us-east-2.amazonaws.com/repl/repl/?kernel=python](http://www.galpy.org.s3-website.us-east-2.amazonaws.com/repl/repl/?kernel=python). Uses [jobovy/jupyterlite:quiet-prerun](https://github.com/jobovy/jupyterlite/tree/quiet-prerun), a slightly modified version of [jupyterlite](https://github.com/jupyterlite/jupyterlite).
+Immediate version available at [www.galpy.org.s3-website.us-east-2.amazonaws.com/repl/repl/?kernel=python](http://www.galpy.org.s3-website.us-east-2.amazonaws.com/repl/repl/?kernel=python). Uses [jupyterlite](https://github.com/jupyterlite/jupyterlite) with the [pyodide-kernel](https://github.com/jupyterlite/pyodide-kernel) and the [jupyterlite_repl_prerun](https://github.com/jobovy/jupyterlite-repl-prerun) extension.
 
 ## REPL with `galpy` pre-installed available at **[www.galpy.org/repl](https://www.galpy.org/repl)**
 
 Immediate version available at [www.galpy.org.s3-website.us-east-2.amazonaws.com/repl](http://www.galpy.org.s3-website.us-east-2.amazonaws.com/repl).
 
-This REPL supports the usual URL parameters of the `jupyterlite` REPL, for example, `code` for code to pre-populate the REPL with.
+This REPL supports the usual URL parameters of the `jupyterlite` REPL, except for the `code` parameter for code to pre-populate the REPL with; this needs to be done using `prerun-code` instead.
 
 ## Using this repository as a way to set up your own REPL with code to pre-run (or not!)
 
