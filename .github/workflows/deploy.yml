@@ -23,75 +23,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-        with:
-          repository: jobovy/jupyterlite
-          ref: quiet-prerun-purge-galpy
-# Following steps copied from the main juyterlite build action           
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
-      - name: Setup pip (base)
-        shell: bash
-        run: python3 -m pip install --user -U pip setuptools wheel
-      - name: Cache (pip)
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-
-      - name: Setup pip (build)
-        shell: bash
-        run: python3 -m pip install -r requirements-build.txt
-      - name: Install node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 14.x
-      - name: Cache (node_modules)
-        uses: actions/cache@v4
-        id: cache-node-modules
-        with:
-          path: node_modules/
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-      - name: Cache (.yarn-packages)
-        uses: actions/cache@v4
-        id: cache-yarn-packages
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        with:
-          path: .yarn-packages
-          key: |
-            ${{ env.CACHE_EPOCH }}-yarn-packages-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-yarn-packages-
-      - name: Install
-        shell: bash
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: doit setup:js
-      - name: Build (js)
-        shell: bash
-        run: doit -n4 build:js* || doit build:js*
-      - name: Build (py)
-        shell: bash
-        run: doit -n4 build:py*
-      - name: Dist
-        shell: bash
-        run: doit dist
-# Now that jupyterlite is built, let's pip install the wheel
-      - name: Install jupyterlite
-        run: pip install dist/*.whl
+          python-version: "3.13"
+      - name: Install JupyterLite
+        run: python -m pip install jupyterlite-core
+      - name: Install pyodide-kernel extension
+        run: python -m pip install jupyterlite-pyodide-kernel
+      - name: Install my jupyterlite_repl_prerun extension
+        run: python -m pip install jupyterlite_repl_prerun    
 # and let's create an empty site
       - name: create output dir
         run: mkdir output
-      - name: make empty site
+      - name: Build jupyterlite REPL
         working-directory: output
-        run: jupyter lite init --apps repl --no-unused-shared-packages --no-sourcemaps
-# Edit the jupyter-lite.json to use galpy's favicon and latest pyodide
+        run: jupyter lite build --apps repl --no-unused-shared-packages --no-sourcemaps
+# Edit the jupyter-lite.json to use galpy's favicon
       - name: Edit jupyter-lite.json config
         working-directory: output/_output
-        run: python -c "import json; jsonFile = open('jupyter-lite.json'); data= json.load(jsonFile); jsonFile.close(); data['jupyter-config-data']['faviconUrl']= '../../images/logo-small.ico'; data['jupyter-config-data']['litePluginSettings']= {'@jupyterlite/pyolite-kernel-extension:kernel':{'pyodideUrl':'https://cdn.jsdelivr.net/pyodide/v0.21.2/full/pyodide.js'}}; jsonFile= open('jupyter-lite.json','w'); json.dump(data,jsonFile,indent=2); jsonFile.close()"
+        run: python -c "import json; jsonFile = open('jupyter-lite.json'); data= json.load(jsonFile); jsonFile.close(); data['jupyter-config-data']['faviconUrl']= '../../images/logo-small.ico'; jsonFile= open('jupyter-lite.json','w'); json.dump(data,jsonFile,indent=2); jsonFile.close()"
 # Touch all files so they sync to S3
       - name: Touch files
         working-directory: output/_output
