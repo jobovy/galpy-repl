@@ -4,7 +4,7 @@ import micropip
 await micropip.install('astroquery')
 # Install galpy, first need to uninstall the version that comes with pyodide
 micropip.uninstall('galpy',verbose=True)
-await micropip.install(['numpy','scipy','matplotlib','astropy','future','setuptools','https://www.galpy.org/wheelhouse/galpy-1.11.1.dev0-cp312-cp312-pyodide_2024_0_wasm32.whl'],verbose=True)
+await micropip.install(['numpy','scipy','matplotlib','astropy','future','setuptools','https://www.galpy.org/wheelhouse/galpy-1.11.2.dev0-cp312-cp312-pyodide_2024_0_wasm32.whl'],verbose=True)
 # Turn off warnings
 import warnings
 from galpy.util import galpyWarning
